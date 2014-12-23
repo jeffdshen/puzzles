@@ -26,7 +26,6 @@ public class WordSplitter<Key> {
         }
         this.logFreqTotal = Math.log(freqTotal);
 
-        System.out.println(freqTotal);
         this.p = Math.log(p);
         this.q = Math.log(1 - p);
     }
