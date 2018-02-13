@@ -1,6 +1,4 @@
-package func.udf;
-
-import func.BinaryOperation;
+package func.aggregate;
 
 public class Addition implements BinaryOperation<Long> {
     @Override

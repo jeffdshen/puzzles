@@ -1,17 +1,19 @@
-package func;
+package func.aggregate;
 
 import dict.ArrayListStack;
 import dict.PrefixIterable;
 import dict.PrefixStack;
+import func.aggregate.BinaryOperation;
+import func.hash.HashFunction;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class KeyAggregator<Key1, Key2, Value> {
-    private ListFunction<Key1, Key2> map;
+    private HashFunction<Key1, Key2> map;
     private BinaryOperation<Value> sum;
 
-    public KeyAggregator(ListFunction<Key1, Key2> map, BinaryOperation<Value> sum) {
+    public KeyAggregator(HashFunction<Key1, Key2> map, BinaryOperation<Value> sum) {
         this.map = map;
         this.sum = sum;
     }
@@ -23,6 +25,7 @@ public class KeyAggregator<Key1, Key2, Value> {
         return recurser.getResults();
     }
 
+    //TODO
     private class AdditiveRecurser {
         private PrefixStack<Key1, Value> stack;
         private Map<Key2, Value> results;

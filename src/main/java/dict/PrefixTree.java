@@ -28,11 +28,11 @@ public class PrefixTree<Key, Value> implements PrefixIterable<Key, Value> {
         }
     }
 
-    public Value get(List<Key> keys) {
+    public Value get(Iterable<Key> keys) {
         return getNode(keys).getValue();
     }
 
-    private Node<Key, Value> getNode(List<Key> keys) {
+    private Node<Key, Value> getNode(Iterable<Key> keys) {
         Node<Key, Value> node = root;
         for (Key key : keys) {
             node.add(key);

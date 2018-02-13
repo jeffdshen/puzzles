@@ -1,4 +1,4 @@
-package func;
+package func.hash;
 
 import com.google.common.base.Preconditions;
 import dict.ArrayListStack;
@@ -9,10 +9,10 @@ import java.util.Set;
 
 public class AdditiveFunctionStack<Key, Value> implements PrefixStack<Key, Value> {
     private final PrefixStack<Key, ?> stack;
-    private final ListFunction<Key, Value> func;
+    private final HashFunction<Key, Value> func;
     private final ArrayListStack<Value> values;
 
-    public AdditiveFunctionStack(PrefixStack<Key, ?> stack, ListFunction<Key, Value> func) {
+    public AdditiveFunctionStack(PrefixStack<Key, ?> stack, HashFunction<Key, Value> func) {
         Preconditions.checkArgument(func.hasProperty(FunctionProperty.INDEXED_ADDITIVE));
 
         this.stack = stack;

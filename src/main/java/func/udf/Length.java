@@ -1,6 +1,6 @@
 package func.udf;
 
-import func.AdditiveFunction;
+import func.hash.AdditiveFunction;
 
 public class Length<Key> extends AdditiveFunction<Key, Integer> {
     @Override

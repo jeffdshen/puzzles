@@ -1,7 +1,11 @@
+package modules.split;
+
 import com.google.common.collect.ImmutableList;
 import dict.PrefixStack;
 import dict.PrefixTree;
-import func.*;
+import func.aggregate.BinaryFunction;
+import func.hash.IndexedAdditiveFunction;
+import func.hash.IndexedAdditiveFunctionStack;
 import org.apache.log4j.Logger;
 
 import java.util.*;
@@ -11,14 +15,14 @@ public class WordSplitter<Key> {
 
     private final PrefixTree<Key, Long> tree;
     private final Map<Integer, Long> freqByLength;
+    private Sentence<Key> sentence;
     private final Double logFreqTotal;
-    private final double p;
-    private final double q;
 
 
-    public WordSplitter(PrefixTree<Key, Long> tree, Map<Integer, Long> freqByLength, double p) {
+    public WordSplitter(PrefixTree<Key, Long> tree, Map<Integer, Long> freqByLength, Sentence<Key> sentence) {
         this.tree = tree;
         this.freqByLength = freqByLength;
+        this.sentence = sentence;
 
         long freqTotal = 0;
         for (long i : freqByLength.values()) {
@@ -26,11 +30,9 @@ public class WordSplitter<Key> {
         }
         this.logFreqTotal = Math.log(freqTotal);
 
-        this.p = Math.log(p);
-        this.q = Math.log(1 - p);
     }
 
-    private PrefixStack<Key, Double> getProbabilityStack(final List<Key> sentence, final int start) {
+    private PrefixStack<Key, Double> getProbabilityStack(final Sentence<Key> sentence, final int start) {
         return new IndexedAdditiveFunctionStack<>(tree.prefixStack(),
             new IndexedAdditiveFunction<Key, Double>() {
                 @Override
@@ -44,7 +46,11 @@ public class WordSplitter<Key> {
                         return prob;
                     }
 
-                    double hit = key.equals(sentence.get(start + index)) ? p : q;
+                    if (start + index >= sentence.size() || !sentence.contains(start + index, key)) {
+                        return null;
+                    }
+
+                    double hit = sentence.getLogProbability(start + index, key);
                     return hit + prob;
                 }
             },
@@ -57,7 +63,7 @@ public class WordSplitter<Key> {
         );
     }
 
-    public List<List<Key>> split(List<Key> sentence) {
+    public List<List<Key>> split() {
         Map<Integer, Double> dist = new HashMap<>();
         Map<Integer, List<Key>> prev = new HashMap<>();
         Set<Integer> seen = new HashSet<>();
@@ -108,9 +114,10 @@ public class WordSplitter<Key> {
         return builder.build().reverse();
     }
 
+    // TODO
     private class EdgeIterator {
         private final int u;
-        private List<Key> sentence;
+        private Sentence<Key> sentence;
         private Map<Integer, Double> dist;
         private Map<Integer, List<Key>> prev;
         private final PrefixStack<Key, Double> stack;
@@ -118,7 +125,7 @@ public class WordSplitter<Key> {
         public EdgeIterator(
             int u,
             PrefixStack<Key, Double> stack,
-            List<Key> sentence,
+            Sentence<Key> sentence,
             Map<Integer, Double> dist,
             Map<Integer, List<Key>> prev
         ) {

@@ -1,4 +1,4 @@
-package parse;
+package dict.aggregators;
 
 import dict.Pair;
 import dict.PrefixAggregator;

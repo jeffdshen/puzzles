@@ -3,6 +3,7 @@ package parse;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import dict.PrefixTree;
+import dict.aggregators.SumAggregator;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -53,7 +54,6 @@ public class FrequencyParser {
 
         try (BufferedReader in = new BufferedReader(reader)) {
             int i = 0;
-            int count = 0;
             for (String s = in.readLine(); s != null; s = in.readLine()) {
                 try {
                     StringTokenizer st = new StringTokenizer(s, delimiter);
@@ -75,8 +75,6 @@ public class FrequencyParser {
                     errors++;
                 }
             }
-
-            System.out.println(count);
         } catch (IOException e) {
             logger.error("Error parsing frequency dictionary", e);
         }

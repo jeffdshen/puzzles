@@ -1,15 +1,10 @@
-package func;
+package func.hash;
 
 import java.util.List;
 
-public abstract class AdditiveFunction<Key, Value> implements ListFunction<Key, Value> {
+public abstract class IndexedAdditiveFunction<Key, Value> implements HashFunction<Key, Value> {
     @Override
-    public final Value apply(int index, Key key, Value value) {
-        return apply(key, value);
-    }
-
-    @Override
-    public ListFunction<Value, Key> inverse() {
+    public final Value apply(Key key, Value value) {
         throw new UnsupportedOperationException();
     }
 
@@ -17,8 +12,6 @@ public abstract class AdditiveFunction<Key, Value> implements ListFunction<Key, 
     public final boolean hasProperty(FunctionProperty property) {
         switch (property) {
             case ADDITIVE:
-                return true;
-            case BIJECTIVE:
                 return false;
             case INDEXED_ADDITIVE:
                 return true;
