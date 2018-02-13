@@ -1,3 +1,6 @@
+########## Puzzles ###############
+src/main/resources/dict/
+
 ########## Maven #################
 
 target/
